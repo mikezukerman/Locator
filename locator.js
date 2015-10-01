@@ -37,7 +37,7 @@ function buildGeoServiceUrl(query) {
  function sendResponse(mainResponse) {
      //console.log(allGeoData);
      mainResponse.writeHead(200, { 'Content-Type': 'application/json' })
-     //console.log(allGeoData);
+     console.log(allGeoData);
      
      //var results = (JSON.parse(allGeoData)).query.geosearch;
      //results.sort(function(p1, p2) { return parseFloat(p1.dist) - parseFloat(p2.dist); });
