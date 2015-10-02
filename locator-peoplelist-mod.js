@@ -12,5 +12,10 @@ module.exports.getPeople = function getPeople() {
 }
 
 module.exports.savePeople = function savePeople(people) {
+    resetDistance(people); //distance is menaingless in this context
    fs.writeFileSync(_file, JSON.stringify(people));   
+}
+
+function resetDistance(people) {
+  for(i=0;i<people.length;i++) { people[i].Distance=0; }   
 }

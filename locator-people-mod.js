@@ -6,6 +6,12 @@ module.exports.showAllPeople = function showAllPeople() {
     return people;
 }
 
+module.exports.clearPeople = function clearPeople() { 
+    people = [];
+    peopleList.savePeople(people);
+    return [];
+}
+
 module.exports.findPeople = function  findPeople(query) { 
     var srcUser = findUserById(query.user);
     if (srcUser) {
@@ -32,6 +38,7 @@ module.exports.updateUserLocation = function updateUserLocation(query) {
         console.log("User '" + userId + "' found, updating");
         user.Location.Latitude = latitude;
         user.Location.Longitude = longitude;
+        user.Distance = 0;
     }
     peopleList.savePeople(people);
     
