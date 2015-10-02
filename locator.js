@@ -7,6 +7,7 @@ var app = express();
 app.get('/findPlaces', findPlaces);
 app.get('/findPeople', findPeople);
 app.get('/updateUserLocation', updateUserLocation);
+app.get('/showallPeople', showAllPeople);
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
@@ -27,5 +28,10 @@ function findPeople(req, res) {
 }
 
 function updateUserLocation(req, res) {
-    
+    console.log('Update user location called, query = ' + JSON.stringify(req.query));
+    res.json(peopleMod.updateUserLocation(req.query));
+}
+
+function showAllPeople(req, res) {
+    res.json(peopleMod.showAllPeople());
 }
