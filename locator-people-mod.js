@@ -1,4 +1,4 @@
-var dateFormat = require('dateformat');
+//var dateFormat = require('dateformat');
 var geometry = require('./locator-geometry-mod.js');
 var peopleList = require('./locator-peoplelist-mod.js');
 var people = peopleList.getPeople();
@@ -90,5 +90,5 @@ function idleTooLong(person) {
 
 function getTimeStamp() {
   var d = new Date();
-  return dateFormat(d, "yyyy-mm-dd HH:MM:ss");
+  return d.toString(); //dateFormat(d, "yyyy-mm-dd HH:MM:ss");
 }
