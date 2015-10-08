@@ -1,6 +1,9 @@
+var dateFormat = require('dateformat');
 var geometry = require('./locator-geometry-mod.js');
 var peopleList = require('./locator-peoplelist-mod.js');
 var people = peopleList.getPeople();
+
+var MAX_USER_IDLE_TIME_MS = 1800*1000; //A user idle for too long will be ignored
 
 module.exports.showAllPeople = function showAllPeople() { 
     return people;
@@ -28,9 +31,10 @@ module.exports.updateUserLocation = function updateUserLocation(query) {
     var user = findUserById(userId);
     var latitude = parseFloat(query.lat);
     var longitude = parseFloat(query.lng);
+    var ts = getTimeStamp();
     if (!user) {
         console.log("User '" + userId + "' not found, creating new");
-        user = {UserID: userId, Location: {Latitude: latitude, Longitude: longitude}, Distance:0};
+        user = {UserID: userId, Location: {Latitude: latitude, Longitude: longitude}, Distance:0, LastSeen: ts};
         people.push(user);
         console.log("Added new user " + JSON.stringify(user));
     }
@@ -39,6 +43,7 @@ module.exports.updateUserLocation = function updateUserLocation(query) {
         user.Location.Latitude = latitude;
         user.Location.Longitude = longitude;
         user.Distance = 0;
+        user.LastSeen = ts;
     }
     peopleList.savePeople(people);
     
@@ -59,6 +64,9 @@ function findNeighbors(srcUser, radius) {
         if (person.UserID === srcUser.UserID) { //we look for users other than the one passed in
             return false;
         }
+        else if(idleTooLong(person)) {
+            return false;   
+        }
         else {
             var distance = geometry.computeDistance(srcUser.Location, person.Location);
             if (distance <= radius) {
@@ -68,4 +76,19 @@ function findNeighbors(srcUser, radius) {
         }
         return false;
     }
+}
+
+function idleTooLong(person) {
+  if (person.LastSeen === '') { return false; }
+  var lastSeen = new Date(person.LastSeen);   
+  var now = new Date();
+  var idleTime = (now.getTime() - lastSeen.getTime()); //time interval in ms
+    
+    console.log(person.UserID + " last seen " + lastSeen + ", current time: " + now + ", idleTime " + idleTime);
+  return (idleTime >= MAX_USER_IDLE_TIME_MS);
+}
+
+function getTimeStamp() {
+  var d = new Date();
+  return dateFormat(d, "yyyy-mm-dd HH:MM:ss");
 }

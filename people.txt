@@ -1,1 +1,1 @@
-[]
+[{"UserID":"Abraham","Location":{"Latitude":41.42157,"Longitude":-81.4572},"Distance":0,"LastSeen":"2015-10-08 11:50:47"},{"UserID":"Josh","Location":{"Latitude":41.42157,"Longitude":-81.4572},"Distance":0,"LastSeen":"2015-10-08 11:50:48"},{"UserID":"Jake","Location":{"Latitude":41.4157,"Longitude":-81.472},"Distance":0,"LastSeen":"2015-10-08 11:50:50"}]
