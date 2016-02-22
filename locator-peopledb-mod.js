@@ -1,6 +1,5 @@
 var config = require('./config.js');
 var MongoClient = require('mongodb').MongoClient;
-var objectid = require('objectid');
 
 var dbConnection;
 var url = config.MONGO_DB_URL;
