@@ -2,7 +2,7 @@ var config = require('./config.js');
 var MongoClient = require('mongodb').MongoClient;
 
 var dbConnection;
-var url = process.env.OPENSHIFT_MONGODB_DB_HOST || config.MONGO_DB_URL;
+var url = 'mongodb://' + (process.env.OPENSHIFT_MONGODB_DB_HOST || config.MONGO_DB_URL);
 var collectionName = config.MONGO_DB_COLLECTION;
 
 MongoClient.connect(url, function(err, db) {
