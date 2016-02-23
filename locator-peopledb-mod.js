@@ -2,19 +2,7 @@ var config = require('./config.js');
 var MongoClient = require('mongodb').MongoClient;
 
 var dbConnection;
-//var connString = 'mongodb://' + (process.env.OPENSHIFT_MONGODB_DB_HOST || config.MONGO_DB_URL);
-
-// default to a 'localhost' configuration:
-var connectionSring = 'mongodb://127.0.0.1:27017/locator';
-
-// if OPENSHIFT env variables are present, use the available connection info:
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-  connectionSring = 'mongodb://' + process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-  process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-  process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-  process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-  process.env.OPENSHIFT_APP_NAME;
-}
+var connectionSring = getDbConnectionString();
 var collectionName = config.MONGO_DB_COLLECTION;
 
 MongoClient.connect(connectionSring, function(err, db) {
@@ -53,3 +41,20 @@ module.exports.clearAll = function clearAll() {
    dbConnection.collection(collectionName).remove({});
 }
          
+function getDbConnectionString() {
+    var connectionString = 'mongodb://';
+
+    //Use OPENSHIFT env variables if present, otherwise use config file:
+    if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+      connectionString += 
+        process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME;
+    }   
+    else {
+        connectionString += config.MONGO_DB_URL;
+    }
+    return connectionString;
+}

@@ -1,7 +1,6 @@
 var express = require('express');
 var placesMod = require('./locator-places-mod.js');
 var peopleMod = require('./locator-people-withdb-mod.js');
-//var peopleMod = require('./locator-people-mod.js');
 
 var app = express();
 
@@ -23,14 +22,6 @@ function findPlaces(req, res) {
    placesMod.findPlaces(req.query, function(err, placesData) {res.end(placesData);} );
 }
 
-/*
-function findPeople(req, res) {
-   console.log('Find People called, URL: ' + req.baseUrl + '   ' + JSON.stringify(req.query));
-   var peopleData = peopleMod.findPeople(req.query);   
-   res.json(peopleData);
-}
-*/
-
 function findPeople(req, res) {
    console.log('Find People called, URL: ' + req.baseUrl + '   ' + JSON.stringify(req.query));
    peopleMod.findPeople(req.query, function(people) { res.json(people); });
@@ -40,12 +31,6 @@ function updateUserLocation(req, res) {
     console.log('Update user location called, query = ' + JSON.stringify(req.query));
     res.json(peopleMod.updateUserLocation(req.query));
 }
-
-/*
-function showAllPeople(req, res) {
-    res.json(peopleMod.showAllPeople());
-}
-*/
 
 function showAllPeople(req, res) {
     peopleMod.showAllPeople(function(people) { res.json(people); });
