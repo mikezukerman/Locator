@@ -37,7 +37,7 @@ module.exports.updateUser = function updateUser(user) {
     );
 }
   
-module.exports.clearAll = function clearAll() {
+module.exports.clearAllPeople = function clearAllPeople() {
    dbConnection.collection(collectionName).remove({});
 }
          

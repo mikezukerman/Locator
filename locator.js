@@ -8,7 +8,7 @@ app.get('/findPlaces', findPlaces);
 app.get('/findPeople', findPeople);
 app.get('/updateUserLocation', updateUserLocation);
 app.get('/showAllPeople', showAllPeople);
-app.get('/clearPeople', clearPeople);
+app.get('/clearAllPeople', clearAllPeople);
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
@@ -36,6 +36,6 @@ function showAllPeople(req, res) {
     peopleMod.showAllPeople(function(people) { res.json(people); });
 }
 
-function clearPeople(req, res) {
-    res.json(peopleMod.clearPeople());
+function clearAllPeople(req, res) {
+    res.json(peopleMod.clearAllPeople());
 }
