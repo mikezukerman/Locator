@@ -2,18 +2,9 @@ var config = require('./config.js');
 var MongoClient = require('mongodb').MongoClient;
 
 var dbConnection;
-var connectionSring = getDbConnectionString();
-var collectionName = config.MONGO_DB_COLLECTION;
+openConnection();
 
-MongoClient.connect(connectionSring, function(err, db) {
-  if (err == null) {
-    console.log("Connected to server.");
-    dbConnection = db;    
-  }
-    else {
-        console.log("Failed to connect: " + err);
-    }
-});
+var collectionName = config.MONGO_DB_COLLECTION;
 
 module.exports.getPeople = function getPeople(callback) { 
     dbConnection.collection(collectionName).find().toArray(
@@ -23,10 +14,12 @@ module.exports.getPeople = function getPeople(callback) {
 module.exports.findUserById = findUserById;
 
 function findUserById(userId, callback) {
-    dbConnection.collection(collectionName).findOne({ "UserID" : userId},    
-                                function(err, doc) {
-        console.log("Found user by id:" + doc);
-        return callback(doc);} );    
+    dbConnection.collection(collectionName).findOne(
+            { "UserID" : userId},
+            function(err, doc) {
+                console.log("Found user by id:" + doc);
+                return callback(doc); } 
+            );    
 }
 //Update or insert user
 module.exports.updateUser = function updateUser(user) {
@@ -40,7 +33,19 @@ module.exports.updateUser = function updateUser(user) {
 module.exports.clearAllPeople = function clearAllPeople() {
    dbConnection.collection(collectionName).remove({});
 }
-         
+
+function openConnection() {
+    MongoClient.connect(getDbConnectionString(), function(err, db) {
+      if (err == null) {
+        console.log("Connected to server.");
+        dbConnection = db;    
+      }
+        else {
+            console.log("Failed to connect: " + err);
+        }
+    });    
+}
+
 function getDbConnectionString() {
     var connectionString = 'mongodb://';
 

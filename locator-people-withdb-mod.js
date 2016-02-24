@@ -12,7 +12,7 @@ module.exports.clearAllPeople = function clearAllPeople() {
 }
 
 module.exports.findPeople = function  findPeople(query, callback) { 
-    peopleDB.findUserById(query.user, function(user) {
+    peopleDB.findUserById(query.user.toLowerCase(), function(user) {
           findNeighbors(user, parseInt(query.radius), callback); 
     });
 }
@@ -28,7 +28,7 @@ function findNeighbors(srcUser, radius, callback) {
 }
 
 module.exports.updateUserLocation = function updateUserLocation(query) {   
-    var user = { UserID: query.user, 
+    var user = { UserID: query.user.toLowerCase(), 
                  Location: {Latitude: parseFloat(query.lat), Longitude: parseFloat(query.lng)}, 
                  Distance: 0, 
                  LastSeen: getTimeStamp()};
