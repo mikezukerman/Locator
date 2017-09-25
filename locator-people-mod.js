@@ -5,17 +5,17 @@ var people = peopleList.getPeople();
 
 var MAX_USER_IDLE_TIME_MS = 1800*1000; //A user idle for too long will be ignored
 
-module.exports.showAllPeople = function showAllPeople() { 
+module.exports.showAllPeople = function showAllPeople() {
     return people;
 }
 
-module.exports.clearPeople = function clearPeople() { 
+module.exports.clearPeople = function clearPeople() {
     people = [];
     peopleList.savePeople(people);
     return [];
 }
 
-module.exports.findPeople = function  findPeople(query) { 
+module.exports.findPeople = function  findPeople(query) {
     var srcUser = findUserById(query.user);
     if (srcUser) {
         var radius = parseInt(query.radius);
@@ -26,7 +26,7 @@ module.exports.findPeople = function  findPeople(query) {
     }
 }
 
-module.exports.updateUserLocation = function updateUserLocation(query) {    
+module.exports.updateUserLocation = function updateUserLocation(query) {
     var userId = query.user;
     var user = findUserById(userId);
     var latitude = parseFloat(query.lat);
@@ -46,7 +46,7 @@ module.exports.updateUserLocation = function updateUserLocation(query) {
         user.LastSeen = ts;
     }
     peopleList.savePeople(people);
-    
+
     return people; //user;
 }
 
@@ -59,13 +59,13 @@ function findUserById(userId) {
   return null;
 }
 
-function findNeighbors(srcUser, radius) {    
+function findNeighbors(srcUser, radius) {
     return function(person) {
         if (person.UserID === srcUser.UserID) { //we look for users other than the one passed in
             return false;
         }
         else if(idleTooLong(person)) {
-            return false;   
+            return false;
         }
         else {
             var distance = geometry.computeDistance(srcUser.Location, person.Location);
@@ -80,10 +80,10 @@ function findNeighbors(srcUser, radius) {
 
 function idleTooLong(person) {
   if (person.LastSeen === '') { return false; }
-  var lastSeen = new Date(person.LastSeen);   
+  var lastSeen = new Date(person.LastSeen);
   var now = new Date();
   var idleTime = (now.getTime() - lastSeen.getTime()); //time interval in ms
-    
+
     console.log(person.UserID + " last seen " + lastSeen + ", current time: " + now + ", idleTime " + idleTime);
   return (idleTime >= MAX_USER_IDLE_TIME_MS);
 }

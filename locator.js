@@ -17,7 +17,7 @@ var server = app.listen(server_port, server_ip_address, function () {
   console.log( "Server started on " + server_ip_address + ":" + server_port )
 });
 
-function findPlaces(req, res) {   
+function findPlaces(req, res) {
    console.log('Find Places called, URL: ' + req.baseUrl + '   ' + JSON.stringify(req.query));
    placesMod.findPlaces(req.query, function(err, placesData) {res.end(placesData);} );
 }

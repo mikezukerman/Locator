@@ -1,24 +1,21 @@
 var https = require('https');
-var GEOURL_BASE = 'https://en.wikipedia.org/w/api.php?action=query&list=geosearch&format=json&gsprop=type';
-var allGeoData;
+var config = require('./config.js');
 
+var allGeoData;
 var calls = 0;
 
-module.exports.findPlaces = function  findPlaces(query, callback) {      
-    var geoServiceUrl = buildGeoServiceUrl(query);
-    console.log("Calling " + geoServiceUrl);
+module.exports.findPlaces = function  findPlaces(query, callback) {
+    var placesServiceUrl = buildPlacesServiceUrl(query);
+    console.log("Calling " + placesServiceUrl);
     allGeoData = '';
-    
-    calls++;
-    console.log("Places called " + calls + " times");
-    
-    https.get(geoServiceUrl, function(geoResponse) { 
-        geoResponse.on('data', function(data) {allGeoData += data;}); 
-        geoResponse.on('end', function() {return callback(null, allGeoData);} ); 
+
+    https.get(placesServiceUrl, function(geoResponse) {
+        geoResponse.on('data', function(data) {allGeoData += data;});
+        geoResponse.on('end', function() {return callback(null, allGeoData);} );
     }).on('error', function(e) { console.log("Got error: " + e.message);});
 }
 
-function buildGeoServiceUrl(query) {
-    var url =  GEOURL_BASE + "&gsradius=" + query.radius + "&gscoord=" + query.lat + "|" + query.lng;
+function buildPlacesServiceUrl(query) {
+    var url =  config.PLACES_SERVICE_URL + "&gsradius=" + query.radius + "&gscoord=" + query.lat + "|" + query.lng;
     return url;
 }
